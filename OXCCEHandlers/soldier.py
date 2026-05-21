@@ -4,7 +4,7 @@ from constants import TU, STAMINA, HEALTH, BRAVERY, REACTIONS, FIRING, THROWING,
 # but they are meant to be set through the setter methods to make sure that all variable pairs
 # stay in a reasonable range to each other (ie don't have larger base than current value).
 #
-# User input is expected to already be sanitized an we will accept anything from existing files.
+# User input is expected to already be sanitized and we will accept anything from existing files.
 
 class soldier:
     def __init__(self, id : int = 0, name:str = "") -> None:
@@ -43,3 +43,15 @@ class soldier:
         self.stats[stat][CURRENT] = value
         if self.stats[stat][BASE] > self.stats[stat][CURRENT]:
             self.stats[stat][BASE] = value
+
+    # for debugging
+    def soldier_to_string(self) -> str:
+        return_value = ""
+
+        return_value += f"{self.name} (ID: {self.id}):\n"
+        lines = self.stats.keys()
+        for line in lines:
+            return_value += f"{line}: {self.stats[line][BASE]} / {self.stats[line][CURRENT]}\n"        
+        return_value += "\n"
+
+        return return_value
