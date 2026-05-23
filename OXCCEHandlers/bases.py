@@ -16,3 +16,14 @@ class base:
     
     def get_num_soldier(self) -> int:
         return len(self.soldiers)
+    
+    def add_soldier_to_base(self, unit : soldier) -> None:
+        self.soldiers.append(unit)
+    
+    def debug_base_to_string(self) -> str:
+        return_value = f"{self.name}\n"
+        for unit in self.soldiers:
+            return_value += unit.debug_soldier_to_string()
+            return_value += "\n"
+        return_value += "\n"
+        return return_value
