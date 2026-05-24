@@ -32,20 +32,20 @@ class soldier:
         self.name = name
 
     # When setting base or current stats, also check if this leaves the base as smalller or equal
-    # to the current stat, othewise also set the other value to keep always keep base as smaller
+    # to the current stat, othewise also set the other value to always keep base as smaller
     # or equal
-    def set_base_stat(self, stat, value) -> None:
+    def set_base_stat(self, stat : str, value : int) -> None:
         self.stats[stat][BASE] = value
         if self.stats[stat][BASE] > self.stats[stat][CURRENT]:
             self.stats[stat][CURRENT] = value
     
-    def set_current_stat(self, stat, value) -> None:
+    def set_current_stat(self, stat : str, value : int) -> None:
         self.stats[stat][CURRENT] = value
         if self.stats[stat][BASE] > self.stats[stat][CURRENT]:
             self.stats[stat][BASE] = value
 
     # for debugging
-    def soldier_to_string(self) -> str:
+    def debug_soldier_to_string(self) -> str:
         return_value = ""
 
         return_value += f"{self.name} (ID: {self.id}):\n"

@@ -11,3 +11,19 @@ PSI_SKILL = "psiSkill"
 
 BASE = 0
 CURRENT = 1
+
+SAVEFILENAME_ID = "name: "
+FUNDS_ID = "funds:"
+FUNDS_PREFIX = "  - "
+BASES_START_ID = "bases:"
+BASES_END_ID = "options:"
+BASE_NAME_ID = "    name: "
+SOLDIER_BLOCK_START_ID = "    soldiers:"
+SOLDIER_BLOCK_END_ID = "    crafts:"
+SOLDIER_START_ID = "      - type: STR_SOLDIER"
+SOLDIER_ID_ID = "        id: "
+SOLDIER_NAME_ID = "        name: "
+SOLDIER_INITIAL_STATS_ID = "        initialStats:"
+SOLDIER_CURRENT_STATS_ID = "        currentStats:"
+SOLDIER_STAT_PREFIX = "          "
+SOLDIER_STAT_SUFFIX = ": "
