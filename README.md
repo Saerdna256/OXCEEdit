@@ -6,3 +6,13 @@
 When finished should allow to edit **funds** and **soldier stats** (both starting and current) while also keeping these values in a reasonable and safe range.
 
 Part of the [boot.dev](https://boot.dev) curriculum (first solo project)
+
+### Done:
+- reading savefile into data structure
+
+### TODO:
+- UI
+- saving data back to savefile
+
+### Long-term:
+- check if changes are necessary for TFTD, implement those
