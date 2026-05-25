@@ -41,8 +41,9 @@ class savedata:
     
     def debug_savedata_to_string(self) -> str:
         return_value = f"{self.name}\n"
-        return_value += f"Cedits: {int(self.credits)}\n"
-        return_value += "Öist of bases:"
+        return_value += f"Cedits: {int(self.credits)}\n\n"
+        return_value += "List of bases:\n"
+        return_value += "--------------\n"
         for current in self.bases:
             return_value += current.debug_base_to_string()
         return return_value        

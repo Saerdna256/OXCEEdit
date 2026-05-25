@@ -48,13 +48,13 @@ def read_soldier(file_handle : TextIOWrapper) -> soldier:
     line = file_handle.readline()
     if not line.startswith(SOLDIER_ID_ID):
         raise ValueError("Invalid save file, did not find soldier id!")
-    tempID = int(line[len(SOLDIER_ID_ID)-1:])
+    tempID = int(line[len(SOLDIER_ID_ID):])
 
     # 05 e 3  - following line should start with "        name: ", save the following name in a temp var
     line = file_handle.readline()
     if not line.startswith(SOLDIER_NAME_ID):
         raise ValueError("Invalid save file, did not find soldier name!")
-    tempName = line[len(SOLDIER_NAME_ID)-1:]
+    tempName = line[len(SOLDIER_NAME_ID):].strip()
 
     # 05 e 4  - save the temp vars in a new soldier object
     newSoldier = soldier(tempID, tempName)
@@ -71,10 +71,10 @@ def read_soldier(file_handle : TextIOWrapper) -> soldier:
         line = file_handle.readline()
         if not line.startswith(SOLDIER_STAT_PREFIX):
             raise ValueError("Improper formatted save file, could not read an initial stat!")
-        tempString = line[len(SOLDIER_STAT_PREFIX)-1:]
+        tempString = line[len(SOLDIER_STAT_PREFIX):]
         statStrings = tempString.split(SOLDIER_STAT_SUFFIX)
-        statName = statStrings[0]
-        statValue = int(statStrings[1])
+        statName = statStrings[0].strip()
+        statValue = int(statStrings[1].strip())
         # 05 e 7  - use the stat name to save the number as the initial stat in the soldier object
         newSoldier.set_base_stat(statName, statValue)
 
@@ -89,10 +89,10 @@ def read_soldier(file_handle : TextIOWrapper) -> soldier:
         line = file_handle.readline()
         if not line.startswith(SOLDIER_STAT_PREFIX):
             raise ValueError("Improper formatted save file, could not read a current stat!")
-        tempString = line[len(SOLDIER_STAT_PREFIX)-1:]
+        tempString = line[len(SOLDIER_STAT_PREFIX):]
         statStrings = tempString.split(SOLDIER_STAT_SUFFIX)
-        statName = statStrings[0]
-        statValue = int(statStrings[1])
+        statName = statStrings[0].strip()
+        statValue = int(statStrings[1].strip())
         # 05 e 10 - use the stat name to save the number as the current stat in the soldier object
         newSoldier.set_current_stat(statName, statValue)
     
@@ -106,6 +106,7 @@ def read_base(file_handle : TextIOWrapper, name : str, order : int) -> base:
     new_base = base(order, name)
 
     # 05 d - search for "    soldiers:" and start the soldier loop on the next line
+    line = file_handle.readline()
     while(not line.startswith(SOLDIER_BLOCK_START_ID)):
         line = file_handle.readline()
         if line == "":
@@ -132,7 +133,7 @@ def read_file(filename : str) -> savedata:
             raise ValueError(f"Not a valid savegame: \"{filename}\"")
         
         # 02 - create savedata variable, read the line !after! "name: " and store the string as the name of the savedata name
-        new_data = savedata(line[len(SAVEFILENAME_ID)-1:])
+        new_data = savedata(line[len(SAVEFILENAME_ID):])
 
         # 03 - continue until the line "funds:"
         while(not line.startswith(FUNDS_ID)):
@@ -142,7 +143,7 @@ def read_file(filename : str) -> savedata:
         
         # 04 - desregard "  - " at the start of the next line, the number following can be saved as funds in the savedata
         line = file_handle.readline()
-        funds = int(line[len(FUNDS_PREFIX)-1:])
+        funds = int(line[len(FUNDS_PREFIX):])
         new_data.set_credits(funds)
 
         # 05 - continue to the line "bases:", here the actual work starts; the following will loop until we have no more bases
@@ -158,7 +159,7 @@ def read_file(filename : str) -> savedata:
             if line.startswith(BASES_END_ID):
                 break 
             if line.startswith(BASE_NAME_ID):
-                base_name = line[len(BASE_NAME_ID)-1:]
+                base_name = line[len(BASE_NAME_ID):]
                 base_counter = base_counter + 1
                 new_base = read_base(file_handle, base_name, base_counter)
                 
@@ -176,7 +177,7 @@ def read_file(filename : str) -> savedata:
 ##########################################################################################
 # for testing
 def main() -> None:
-    data = savedata("testsave.sav")
+    data = read_file("testsave.sav")
     print(data.debug_savedata_to_string())    
 
 if __name__ == "__main__":
