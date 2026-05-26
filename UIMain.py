@@ -11,7 +11,7 @@ class MainWindow(ttk.Window):
         self.geometry("1280x720")
 
         # custom variables
-        self.dataChanged : bool = False    # Any unsaved changes?
+        self.dataChanged : bool = True    # Any unsaved changes?
         self.savefile_path : str = "" # Path to current savefile
 
         # event handlers
@@ -27,8 +27,14 @@ class MainWindow(ttk.Window):
 
 
     def custom_exit_handler(self) -> None:
-        # TODO: Exit logic, ask for saving of unsaved data
-        print("Close event received")
+        if(self.dataChanged):
+            dialog = MessageDialog("Unsaved edits, exit anyways?", "Unsaved edits", buttons=["Exit", "Cancel"], parent=self, default="Cancel", icon=Icon.warning)
+            dialog.show()            
+            if dialog.result != "Exit":
+                return
+        self.destroy()
+
+    def custom_exit(self) -> None:
         self.destroy()
     
 
