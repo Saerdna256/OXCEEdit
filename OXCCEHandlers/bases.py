@@ -1,4 +1,4 @@
-from soldier import soldier
+from .soldier import soldier
 
 class base:
     def __init__(self, order_number = 0, name = "") -> None:

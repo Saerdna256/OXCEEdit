@@ -1,4 +1,4 @@
-from bases import base
+from .bases import base
 
 # Helper class to manage the parts of the savedata we might want to edit. Redaing and setting the name memeber 
 # directly is ok, other access to the member variabels should in this case be completly done by the

@@ -1,4 +1,4 @@
-from constants import TU, STAMINA, HEALTH, BRAVERY, REACTIONS, FIRING, THROWING, STRENGTH, PSI_STRENGTH, PSI_SKILL, BASE, CURRENT
+from .constants import TU, STAMINA, HEALTH, BRAVERY, REACTIONS, FIRING, THROWING, STRENGTH, PSI_STRENGTH, PSI_SKILL, BASE, CURRENT
 
 # Helper class to manage individual soldier. Note that reading from the variabels is ok,
 # but they are meant to be set through the setter methods to make sure that all variable pairs
