@@ -1,9 +1,9 @@
 from io import TextIOWrapper
 
-from constants import *
-from savedata import savedata
-from bases import base
-from soldier import soldier
+from .constants import *
+from .savedata import savedata
+from .bases import base
+from .soldier import soldier
 
 ##########################################################################################
 # First part of the actual savefile management:
@@ -133,7 +133,7 @@ def read_file(filename : str) -> savedata:
             raise ValueError(f"Not a valid savegame: \"{filename}\"")
         
         # 02 - create savedata variable, read the line !after! "name: " and store the string as the name of the savedata name
-        new_data = savedata(line[len(SAVEFILENAME_ID):])
+        new_data = savedata(line[len(SAVEFILENAME_ID):].strip())
 
         # 03 - continue until the line "funds:"
         while(not line.startswith(FUNDS_ID)):
