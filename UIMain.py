@@ -155,7 +155,8 @@ class MainWindow(ttk.Window):
             paginated=False,
             searchable=False,
             bootstyle=PRIMARY,
-            disable_right_click=True,                        
+            disable_right_click=True,
+            yscrollbar=True,                        
         )
 
         # add table and frame to main program
