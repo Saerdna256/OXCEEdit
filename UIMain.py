@@ -121,7 +121,7 @@ class MainWindow(ttk.Window):
         
     # extracted for readability: creating the frame with the information on soldiers in a single base
     def create_base_pane(self, current_base : base) -> None:
-        new_pane = ttk.Frame(self.baseTabs, bootstyle=PRIMARY)
+        new_pane = ttk.Frame(self.baseTabs)
 
         # create soldier table
         # note: only display the current values, as those are more pertinent to gameplay
@@ -150,14 +150,14 @@ class MainWindow(ttk.Window):
             autofit=True,
             paginated=False,
             searchable=False,
-            bootstyle=PRIMARY,            
+            bootstyle=PRIMARY,
+            disable_right_click=True,                        
         )
 
         # add table and frame to main program
         data_table.pack(fill=BOTH, expand=YES, padx=5, pady=5)
         self.frames_for_bases.append(new_pane)
-        self.baseTabs.add(new_pane, text=current_base.name)
-        pass
+        self.baseTabs.add(new_pane, text=current_base.name)        
 
 #####################################################################
 ## DEBUG to quickly test this window alone:
