@@ -1,4 +1,5 @@
 from .bases import base
+from .soldier import soldier
 
 # Helper class to manage the parts of the savedata we might want to edit. Redaing and setting the name memeber 
 # directly is ok, other access to the member variabels should in this case be completly done by the
@@ -38,6 +39,15 @@ class savedata:
         if self.bases == []:
             return None
         return self.bases
+    
+    def get_soldier_by_id(self, id : int) -> soldier | None:
+        for base in self.bases:
+            try:
+                temp = base.get_soldier_by_id(id)
+            except ValueError:
+                continue
+            return temp
+        return None
     
     def debug_savedata_to_string(self) -> str:
         return_value = f"{self.name}\n"
