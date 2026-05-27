@@ -46,6 +46,11 @@ class MainWindow(ttk.Window):
         self.toplevelmiddlerow.rowconfigure(1, weight=1)
         self.toplevelmiddlerow.columnconfigure(0, weight=1)
 
+        # Frame for bottom elements
+        self.toplevelbottomrow = ttk.Frame(self)
+        self.toplevelbottomrow.columnconfigure(0, weight=1)
+        self.toplevelbottomrow.columnconfigure(2, weight=1)
+
         # Top Elements
         self.saveTitleLabel = ttk.Label(self.topleveltoprow, bootstyle=PRIMARY, text="Savedata Name:")
         self.saveTitleInput = ttk.Entry(self.topleveltoprow, bootstyle=PRIMARY, takefocus=False, state=READONLY, width=48)
@@ -63,6 +68,10 @@ class MainWindow(ttk.Window):
         self.dummyPanel = ttk.Frame(self.baseTabs, takefocus=False)
         self.dummyPanel.columnconfigure(0, weight=1)
         self.dummyText = ttk.Label(self.dummyPanel, bootstyle=SECONDARY, text="No data loaded.")
+
+        # Bottom elements
+        self.saveButton = ttk.Button(self.toplevelbottomrow, text="Save File", padding=5, command=None, state=DISABLED)
+        self.exitButton = ttk.Button(self.toplevelbottomrow, text="Exit", padding=5, command=self.custom_exit_handler, bootstyle=SUCCESS)
         
         # UI Elements placement
         ##########################################
@@ -84,11 +93,16 @@ class MainWindow(ttk.Window):
         # Dummy Pane into notebook, notebook into middle frame
         self.dummyText.grid(column=0, row=0, sticky=N, pady=5)
         self.baseTabs.add(self.dummyPanel, text="No data") # Note to self: .forget() to remove a tab from the notebook, then Frame.destroy() to delete it from memory
-        self.baseTabs.grid(row=1, column=0, sticky="NSEW", padx=5, pady=5)        
+        self.baseTabs.grid(row=1, column=0, sticky="NSEW", padx=5, pady=5)
+
+        # Bottom elements into frame
+        self.saveButton.grid(column=1, row=0, sticky=S, padx=5, pady=5)
+        self.exitButton.grid(column=2, row=0, sticky=SE, padx=5, pady=5)
 
         # Frames into window        
         self.topleveltoprow.grid(column=0, row=0, sticky=NSEW, ipadx=5, ipady=5, padx=5, pady=5)
         self.toplevelmiddlerow.grid(column=0, row=1, sticky=NSEW, ipadx=5, ipady=5, padx=5, pady=5)
+        self.toplevelbottomrow.grid(column=0, row=2, sticky=NSEW, ipadx=5, ipady=5, padx=5, pady=5)
     
     # METHODS ###########################################################################################
 
