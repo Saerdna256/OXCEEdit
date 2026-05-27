@@ -13,6 +13,8 @@ from OXCCEHandlers.soldier import soldier
 from OXCCEHandlers.constants import *
 from OXCCEHandlers.reader import read_file
 
+from UISoldier import SoldierWindow
+
 class MainWindow(ttk.Window):
     def __init__(self) -> None:
         super().__init__(themename="cyborg", title="OXCEEdit")        
@@ -114,6 +116,25 @@ class MainWindow(ttk.Window):
                 return
         self.destroy()
 
+    def soldier_double_click(self, event : tk.Event) -> None:
+        # Get Data from event, what soldier did we click on?
+        item_id = event.widget.focus()
+        if not item_id:
+            return
+        item = event.widget.item(item_id) # pyright: ignore[reportAttributeAccessIssue]
+        value = item['values'][0] # First value should be the soldier ID
+
+        # open child window to edit this soldier
+        if not self.data:
+            return
+        unit = self.data.get_soldier_by_id(int(value))
+        if not unit:
+            return
+        editor = SoldierWindow(unit, self)
+
+        # to be continued:
+        # update the soldier when the edit window is confirmed & closed or disregard changes if only closed
+
     def load_file(self) -> None:
         # get the data
         filepath = filedialog.askopenfilename(title="Select OXCE savefile")
@@ -180,6 +201,8 @@ class MainWindow(ttk.Window):
             disable_right_click=True,
             yscrollbar=True,                        
         )
+
+        data_table.view.bind("<Double-1>", self.soldier_double_click)
 
         # add table and frame to main program
         data_table.pack(fill=BOTH, expand=YES, padx=5, pady=5)
