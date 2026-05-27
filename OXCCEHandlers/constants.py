@@ -9,8 +9,8 @@ STRENGTH = "strength"
 PSI_STRENGTH = "psiStrength"
 PSI_SKILL = "psiSkill"
 
-BASE = 0
-CURRENT = 1
+OX_BASE = 0
+OX_CURRENT = 1
 
 SAVEFILENAME_ID = "name: "
 FUNDS_ID = "funds:"

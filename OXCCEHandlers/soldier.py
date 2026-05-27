@@ -1,4 +1,4 @@
-from .constants import TU, STAMINA, HEALTH, BRAVERY, REACTIONS, FIRING, THROWING, STRENGTH, PSI_STRENGTH, PSI_SKILL, BASE, CURRENT
+from .constants import TU, STAMINA, HEALTH, BRAVERY, REACTIONS, FIRING, THROWING, STRENGTH, PSI_STRENGTH, PSI_SKILL, OX_BASE, OX_CURRENT
 
 # Helper class to manage individual soldier. Note that reading from the variabels is ok,
 # but they are meant to be set through the setter methods to make sure that all variable pairs
@@ -35,14 +35,14 @@ class soldier:
     # to the current stat, othewise also set the other value to always keep base as smaller
     # or equal
     def set_base_stat(self, stat : str, value : int) -> None:
-        self.stats[stat][BASE] = value
-        if self.stats[stat][BASE] > self.stats[stat][CURRENT]:
-            self.stats[stat][CURRENT] = value
+        self.stats[stat][OX_BASE] = value
+        if self.stats[stat][OX_BASE] > self.stats[stat][OX_CURRENT]:
+            self.stats[stat][OX_CURRENT] = value
     
     def set_current_stat(self, stat : str, value : int) -> None:
-        self.stats[stat][CURRENT] = value
-        if self.stats[stat][BASE] > self.stats[stat][CURRENT]:
-            self.stats[stat][BASE] = value
+        self.stats[stat][OX_CURRENT] = value
+        if self.stats[stat][OX_BASE] > self.stats[stat][OX_CURRENT]:
+            self.stats[stat][OX_BASE] = value
 
     # for debugging
     def debug_soldier_to_string(self) -> str:
@@ -51,7 +51,7 @@ class soldier:
         return_value += f"{self.name} (ID: {self.id}):\n"
         lines = self.stats.keys()
         for line in lines:
-            return_value += f"{line}: {self.stats[line][BASE]} / {self.stats[line][CURRENT]}\n"        
+            return_value += f"{line}: {self.stats[line][OX_BASE]} / {self.stats[line][OX_CURRENT]}\n"        
         return_value += "\n"
 
         return return_value
