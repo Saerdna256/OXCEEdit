@@ -156,10 +156,12 @@ class MainWindow(ttk.Window):
 
         # display the data
         self.saveTitleInput.config(state=NORMAL)
+        self.saveTitleInput.delete(0, tk.END)
         self.saveTitleInput.insert(0, self.data.name)
         self.saveTitleInput.config(state=READONLY)
 
-        self.saveCreditsInput.insert(8, str(self.data.get_credits()))
+        self.saveCreditsInput.delete(0, tk.END)
+        self.saveCreditsInput.insert(0, str(self.data.get_credits()))
 
         for base in self.data.bases:
             self.create_base_pane(base)        
