@@ -1,5 +1,7 @@
 # import tkinter as tk
 import ttkbootstrap as ttk
+from ttkbootstrap.dialogs import MessageDialog
+from ttkbootstrap.icons import Icon
 from ttkbootstrap.constants import * # pyright: ignore[reportWildcardImportFromLibrary]
 
 from OXCCEHandlers.soldier import soldier
@@ -8,12 +10,14 @@ from OXCCEHandlers.constants import *
 class SoldierWindow(ttk.Toplevel):
     def __init__(self, unit : soldier, root : ttk.Window) -> None:
         # create modal window
-        super().__init__(title=unit.name, iconphoto="", resizable=(False, False), topmost=True, transient=root)
+        super().__init__(title="Edit Soldier", iconphoto="", resizable=(False, False), topmost=True, transient=root)        
         self.wait_visibility()
         self.grab_set()
         self.focus()
 
+        # event handlers
         isOK = self.register(self.testOK)
+        self.protocol("WM_DELETE_WINDOW", self.custom_exit_handler)
 
         # temp vars to allow canceling out
         ##########################################
@@ -46,9 +50,9 @@ class SoldierWindow(ttk.Toplevel):
         
          # UI Elements definitions
         ##########################################
-
         self.header_bar = ttk.Frame(master=self)
         self.body = ttk.Frame(master=self)
+        self.footer = ttk.Frame(master=self)
 
         self.header_text = ttk.Label(master=self.header_bar, text=f"Soldier {unit.id}: {unit.name}", bootstyle=SUCCESS)
 
@@ -88,7 +92,8 @@ class SoldierWindow(ttk.Toplevel):
         self.current_psi_skill_entry = ttk.Entry(master=self.body, width=3, validate='all', validatecommand=(isOK, '%P'), textvariable=self.current_stats[PSI_SKILL])
         self.current_psy_strength_entry = ttk.Entry(master=self.body, width=3, validate='all', validatecommand=(isOK, '%P'), textvariable=self.current_stats[PSI_STRENGTH])
 
-
+        self.cancel_button = ttk.Button(master=self.footer, command=self.on_click_cancel, text="Cancel", bootstyle=SUCCESS)
+        self.ok_button = ttk.Button(master=self.footer, command=self.destroy, text="Confirm", bootstyle=WARNING, state=DISABLED)
 
         # UI Elements placement
         ##########################################
@@ -135,9 +140,15 @@ class SoldierWindow(ttk.Toplevel):
         self.current_psi_skill_entry.grid(row=9, column=3, sticky=W)
         self.current_psy_strength_entry.grid(row=10, column=3, sticky=W)
 
-        self.header_bar.grid(column=1, row=0, sticky=NSEW)
+        self.footer.columnconfigure(0, weight=1)        
+        self.footer.columnconfigure(3, weight=1)
 
+        self.cancel_button.grid(row=0, column=1, padx=5, pady=5, sticky=N)
+        self.ok_button.grid(row=0, column=2, padx=5, pady=5, sticky=N)
+
+        self.header_bar.grid(column=1, row=0, sticky=NSEW)
         self.body.grid(column=1, columnspan=3, row=1, sticky=NSEW)
+        self.footer.grid(column=1, row=2, sticky=NSEW)
         
         # wait for window to close
         self.wait_window(self)
@@ -152,3 +163,19 @@ class SoldierWindow(ttk.Toplevel):
         if value < 0:
             return False
         return True
+    
+    def on_click_cancel(self) -> None:
+        # cancel out edits
+        self.edited = False
+        self.destroy()
+
+    def on_click_confirm(self) -> None:
+        self.destroy()
+
+    def custom_exit_handler(self) -> None:
+        if(self.edited):
+            dialog = MessageDialog("Unsaved edits, exit anyways?", "Unsaved edits", buttons=["Exit", "Cancel"], parent=self, default="Cancel", icon=Icon.warning)
+            dialog.show()
+            if dialog.result != "Exit":
+                return
+        self.destroy()
