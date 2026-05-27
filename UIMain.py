@@ -36,7 +36,9 @@ class MainWindow(ttk.Window):
         self.topleveltoprow = ttk.Labelframe(self, labelanchor=NW, text="Savefile", bootstyle=PRIMARY)
         self.topleveltoprow.columnconfigure(0, weight=0)
         self.topleveltoprow.columnconfigure(1, weight=0)
-        self.topleveltoprow.columnconfigure(2, weight=1)
+        self.topleveltoprow.columnconfigure(2, weight=0)
+        self.topleveltoprow.columnconfigure(3, weight=0)
+        self.topleveltoprow.columnconfigure(4, weight=1)
 
         # Frame for middle elements
         self.toplevelmiddlerow = ttk.Labelframe(self, labelanchor=NW, text="Soldiers at bases", bootstyle=PRIMARY)
@@ -45,8 +47,10 @@ class MainWindow(ttk.Window):
         self.toplevelmiddlerow.columnconfigure(0, weight=1)
 
         # Top Elements
-        self.saveTitleInput = ttk.Entry(self.topleveltoprow, bootstyle=PRIMARY, takefocus=False, state=READONLY, width=64)
-        self.saveTitleLabel = ttk.Label(self.topleveltoprow, bootstyle=PRIMARY, text="Savedata Name: ")
+        self.saveTitleLabel = ttk.Label(self.topleveltoprow, bootstyle=PRIMARY, text="Savedata Name:")
+        self.saveTitleInput = ttk.Entry(self.topleveltoprow, bootstyle=PRIMARY, takefocus=False, state=READONLY, width=48)
+        self.saveCreditsLabel = ttk.Label(self.topleveltoprow, bootstyle=PRIMARY, text="Credits (edit in place):")
+        self.saveCreditsInput = ttk.Entry(self.topleveltoprow, bootstyle=PRIMARY, takefocus=True, state=NORMAL, width=16)
         self.loadButton = ttk.Button(self.topleveltoprow, text="Load File...", padding=5, command=self.load_file)
 
         # Middle Elements
@@ -69,8 +73,10 @@ class MainWindow(ttk.Window):
 
         # Top elements into frame
         self.saveTitleLabel.grid(column=0, row=0, sticky=W, padx =5, pady = 5)
-        self.saveTitleInput.grid(column=1, row=0, sticky=W, padx =5, pady = 5)        
-        self.loadButton.grid(column=2, row=0, sticky=E, padx=5, pady=5)
+        self.saveTitleInput.grid(column=1, row=0, sticky=W, padx =5, pady = 5)
+        self.saveCreditsLabel.grid(column=2, row=0, sticky=W, padx =5, pady = 5)        
+        self.saveCreditsInput.grid(column=3, row=0, sticky=W, padx =5, pady = 5)        
+        self.loadButton.grid(column=4, row=0, sticky=E, padx=5, pady=5)
 
         # Middle elements into frame
         self.instructionsLabel.grid(row=0, column=0, sticky="", padx=5, pady=5)
@@ -117,6 +123,8 @@ class MainWindow(ttk.Window):
         self.saveTitleInput.config(state=NORMAL)
         self.saveTitleInput.insert(0, self.data.name)
         self.saveTitleInput.config(state=READONLY)
+
+        self.saveCreditsInput.insert(8, str(self.data.get_credits()))
 
         for base in self.data.bases:
             self.create_base_pane(base)        
