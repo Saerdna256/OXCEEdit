@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 import ttkbootstrap as ttk
 from ttkbootstrap.dialogs import MessageDialog
+from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.icons import Icon
 from ttkbootstrap.widgets.tableview import Tableview
 from ttkbootstrap.constants import * # pyright: ignore[reportWildcardImportFromLibrary]
@@ -98,9 +99,11 @@ class MainWindow(ttk.Window):
         filepath = filedialog.askopenfilename(title="Select OXCE savefile")
         if not filepath:
             return
-        self.data = read_file(str(filepath))
-        if not self.data:
-            raise ValueError("read invalid save data or failed to store save data in memory")
+        try:
+            self.data = read_file(str(filepath))
+        except ValueError:
+            Messagebox.show_error(message="Invalid file format!", title="Error")
+            return
         
         # delete old data of bases, if any
         if len(self.frames_for_bases) > 0:
@@ -143,6 +146,7 @@ class MainWindow(ttk.Window):
                 soldier.stats[PSI_STRENGTH][OX_CURRENT],
             )
             row_data.append(row)
+
         data_table = Tableview(
             master=new_pane,
             coldata=headers,
