@@ -47,6 +47,12 @@ class SoldierWindow(ttk.Toplevel):
             PSI_SKILL: ttk.StringVar(value=str(unit.stats[PSI_SKILL][OX_CURRENT])),
             PSI_STRENGTH: ttk.StringVar(value=str(unit.stats[PSI_STRENGTH][OX_CURRENT]))
         }
+
+        # enable tracing of changes
+        for var in self.base_stats.values():
+            var.trace_add("write", self.on_entry_change)
+        for var in self.current_stats.values():
+            var.trace_add("write", self.on_entry_change)
         
          # UI Elements definitions
         ##########################################
@@ -179,3 +185,7 @@ class SoldierWindow(ttk.Toplevel):
             if dialog.result != "Exit":
                 return
         self.destroy()
+
+    def on_entry_change(self, *args) -> None:
+        self.edited = True
+        self.ok_button.config(state=NORMAL)
