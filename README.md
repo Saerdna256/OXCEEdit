@@ -9,10 +9,12 @@ Part of the [boot.dev](https://boot.dev) curriculum (first solo project)
 
 ### Done:
 - reading savefile into data structure
+- UI
 
 ### TODO:
-- UI
 - saving data back to savefile
 
 ### Long-term:
 - check if changes are necessary for TFTD, implement those
+- improve input validation on skill entries, rather clunky right now
+- take a look at simplifying the creation of the edit soldier dialog (lot's of repeating code there right now)
