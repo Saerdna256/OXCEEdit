@@ -31,8 +31,12 @@ class MainWindow(ttk.Window):
         # soldier tables for later updating (after edits)
         self.soldier_tables : list[Tableview] = []
 
+        # String Vars for input monitoring
+        self.creditsVar = ttk.StringVar()
+
         # event handlers
         self.protocol("WM_DELETE_WINDOW", self.custom_exit_handler)
+        isCreditsOK = self.register(self.testCredits)
 
         # UI Elements definitions
         ##########################################
@@ -60,7 +64,8 @@ class MainWindow(ttk.Window):
         self.saveTitleLabel = ttk.Label(self.topleveltoprow, bootstyle=PRIMARY, text="Savedata Name:")
         self.saveTitleInput = ttk.Entry(self.topleveltoprow, bootstyle=PRIMARY, takefocus=False, state=READONLY, width=48)
         self.saveCreditsLabel = ttk.Label(self.topleveltoprow, bootstyle=PRIMARY, text="Credits (edit in place):")
-        self.saveCreditsInput = ttk.Entry(self.topleveltoprow, bootstyle=PRIMARY, takefocus=True, state=NORMAL, width=16)
+        self.saveCreditsInput = ttk.Entry(self.topleveltoprow, bootstyle=PRIMARY, takefocus=True, state=NORMAL, width=16, 
+                                          textvariable=self.creditsVar, validate='all', validatecommand=(isCreditsOK, '%P'))
         self.loadButton = ttk.Button(self.topleveltoprow, text="Load File...", padding=5, command=self.load_file)
 
         # Middle Elements
@@ -183,15 +188,20 @@ class MainWindow(ttk.Window):
 
         # display the data
         self.saveTitleInput.config(state=NORMAL)
-        self.saveTitleInput.delete(0, tk.END)
+        self.saveTitleInput.delete(0, END)
         self.saveTitleInput.insert(0, self.data.name)
         self.saveTitleInput.config(state=READONLY)
-
-        self.saveCreditsInput.delete(0, tk.END)
-        self.saveCreditsInput.insert(0, str(self.data.get_credits()))
+        
+        self.creditsVar.set(str(self.data.get_credits()))        
+        
+        # monitor for changes
+        self.creditsVar.trace_add("write", self.on_credits_changed)
 
         for base in self.data.bases:
-            self.create_base_pane(base)        
+            self.create_base_pane(base)    
+
+        self.dataChanged = False
+        self.saveButton.config(state=DISABLED)    
             
         
     # extracted for readability: creating the frame with the information on soldiers in a single base
@@ -237,7 +247,18 @@ class MainWindow(ttk.Window):
         self.soldier_tables.append(data_table)
         data_table.pack(fill=BOTH, expand=YES, padx=5, pady=5)
         self.frames_for_bases.append(new_pane)
-        self.baseTabs.add(new_pane, text=current_base.name)        
+        self.baseTabs.add(new_pane, text=current_base.name)
+
+    def on_credits_changed(self, *args) -> None:
+        self.dataChanged = True
+        self.saveButton.config(state=NORMAL)
+
+    def testCredits(self, what : str) -> bool:
+        try:
+            int(what)
+        except ValueError:
+            return False
+        return True
 
 #####################################################################
 ## DEBUG to quickly test this window alone:
