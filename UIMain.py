@@ -158,6 +158,9 @@ class MainWindow(ttk.Window):
         self.soldier_tables[tab_index-1].view.item(item_id, values=row)
         self.soldier_tables[tab_index-1].load_table_data()
 
+        # unlock save file button
+        self.saveButton.config(state=NORMAL)
+
     def load_file(self) -> None:
         # get the data
         filepath = filedialog.askopenfilename(title="Select OXCE savefile")
