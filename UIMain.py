@@ -28,6 +28,9 @@ class MainWindow(ttk.Window):
         # frames for bases, dynamically constructed and destroyed
         self.frames_for_bases : list[ttk.Frame] = []
 
+        # soldier tables for later updating (after edits)
+        self.soldier_tables : list[Tableview] = []
+
         # event handlers
         self.protocol("WM_DELETE_WINDOW", self.custom_exit_handler)
 
@@ -122,18 +125,42 @@ class MainWindow(ttk.Window):
         if not item_id:
             return
         item = event.widget.item(item_id) # pyright: ignore[reportAttributeAccessIssue]
-        value = item['values'][0] # First value should be the soldier ID
+        soldierID = item['values'][0] # First value should be the soldier ID
 
         # open child window to edit this soldier
         if not self.data:
             return
-        unit = self.data.get_soldier_by_id(int(value))
+        unit = self.data.get_soldier_by_id(int(soldierID))
         if not unit:
             return
+        
         editor = SoldierWindow(unit, self)
 
-        # to be continued:
-        # update the soldier when the edit window is confirmed & closed or disregard changes if only closed
+        print(f"Item ID: {item_id}")
+
+        # Process data after dialog has been closed
+        if not editor.edited:
+            return
+        
+        # new row data
+        row = [unit.id, unit.name]                
+
+        # edit the data in the soldier object (unit) and the new row data to reflect the data returned from the dialog
+        for (key, value) in editor.base_stats.items():
+            unit.stats[key][OX_BASE] = int(value.get())
+        for (key, value) in editor.current_stats.items():
+            unit.stats[key][OX_CURRENT] = int(value.get())
+            row.append(int(value.get()))
+        
+        # Update visual soldier table
+        tab_index = self.baseTabs.index("current")
+        self.soldier_tables[tab_index-1].view.item(item_id, values=row)
+        self.soldier_tables[tab_index-1].load_table_data()
+            
+        # update the table view
+        # this should be doable in place
+        # we already habe the row id up there!
+        # id it item or value?
 
     def load_file(self) -> None:
         # get the data
@@ -152,7 +179,8 @@ class MainWindow(ttk.Window):
                 self.baseTabs.forget(frame)
                 frame.destroy()
             self.frames_for_bases = []
-        self.baseTabs.hide(self.dummyPanel) # don't display the "no data" tab as any savefile has at least one base
+            self.soldier_tables = []
+        self.baseTabs.hide(self.dummyPanel) # don't display the "no data" tab as AFAIK any savefile has at least one base
 
         # display the data
         self.saveTitleInput.config(state=NORMAL)
@@ -207,6 +235,7 @@ class MainWindow(ttk.Window):
         data_table.view.bind("<Double-1>", self.soldier_double_click)
 
         # add table and frame to main program
+        self.soldier_tables.append(data_table)
         data_table.pack(fill=BOTH, expand=YES, padx=5, pady=5)
         self.frames_for_bases.append(new_pane)
         self.baseTabs.add(new_pane, text=current_base.name)        
