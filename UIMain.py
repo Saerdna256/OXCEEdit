@@ -136,8 +136,6 @@ class MainWindow(ttk.Window):
         
         editor = SoldierWindow(unit, self)
 
-        print(f"Item ID: {item_id}")
-
         # Process data after dialog has been closed
         if not editor.edited:
             return
@@ -156,11 +154,6 @@ class MainWindow(ttk.Window):
         tab_index = self.baseTabs.index("current")
         self.soldier_tables[tab_index-1].view.item(item_id, values=row)
         self.soldier_tables[tab_index-1].load_table_data()
-            
-        # update the table view
-        # this should be doable in place
-        # we already habe the row id up there!
-        # id it item or value?
 
     def load_file(self) -> None:
         # get the data
