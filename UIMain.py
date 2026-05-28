@@ -134,11 +134,14 @@ class MainWindow(ttk.Window):
         if not unit:
             return
         
+        # display the actual editing popup dialog
         editor = SoldierWindow(unit, self)
 
         # Process data after dialog has been closed
         if not editor.edited:
             return
+        
+        self.dataChanged = True
         
         # new row data
         row = [unit.id, unit.name]                
