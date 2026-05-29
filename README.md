@@ -7,14 +7,7 @@ When finished should allow to edit **funds** and **soldier stats** (both startin
 
 Part of the [boot.dev](https://boot.dev) curriculum (first solo project)
 
-### Done:
-- reading savefile into data structure
-- UI
-
-### TODO:
-- saving data back to savefile
-
-### Long-term:
+### possible long-term goals:
 - check if changes are necessary for TFTD, implement those
 - improve input validation on skill entries, rather clunky right now
 - take a look at simplifying the creation of the edit soldier dialog (lot's of repeating code there right now)
