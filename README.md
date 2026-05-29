@@ -3,7 +3,15 @@
 # Basic save file editor for OpenXCom Extended 
 *(for now only supporting UFO: Enemy Unknown)*
 
-When finished should allow to edit **funds** and **soldier stats** (both starting and current) while also keeping these values in a reasonable and safe range.
+Edits **funds** and **soldier stats** (both starting and current) while also keeping these values in a reasonable and safe range.
+
+# Installation / Usage
+
+Prebuild binaries are available under [releases](https://github.com/Saerdna256/OXCEEdit/releases).
+
+Alternativly clone the latest release tag and run the supplied "main.bat" on windwos or chmod+x an run the spplied "main.sh" in linux. MacOS is untested but the linus way should work there too.
+
+
 
 Part of the [boot.dev](https://boot.dev) curriculum (first solo project)
 
