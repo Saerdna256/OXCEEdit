@@ -173,12 +173,3 @@ def read_file(filename : str) -> savedata:
     
     # 06 - return the savedata object
     return new_data
-
-##########################################################################################
-# for testing
-def main() -> None:
-    data = read_file("testsave.sav")
-    print(data.debug_savedata_to_string())    
-
-if __name__ == "__main__":
-    main()
