@@ -159,7 +159,7 @@ def read_file(filename : str) -> savedata:
             if line.startswith(BASES_END_ID):
                 break 
             if line.startswith(BASE_NAME_ID):
-                base_name = line[len(BASE_NAME_ID):]
+                base_name = line[len(BASE_NAME_ID):].strip()
                 base_counter = base_counter + 1
                 new_base = read_base(file_handle, base_name, base_counter)
                 
