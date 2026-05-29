@@ -1,3 +1,5 @@
+from shutil import copy as sh_copy
+
 import tkinter as tk
 from tkinter import filedialog
 import ttkbootstrap as ttk
@@ -25,6 +27,7 @@ class MainWindow(ttk.Window):
         # custom variables
         self.dataChanged : bool = False    # Any unsaved changes?                
         self.data : savedata| None = None
+        self.savefile = ""
 
         # frames for bases, dynamically constructed and destroyed
         self.frames_for_bases : list[ttk.Frame] = []
@@ -81,7 +84,7 @@ class MainWindow(ttk.Window):
         self.dummyText = ttk.Label(self.dummyPanel, bootstyle=SECONDARY, text="No data loaded.")
 
         # Bottom elements
-        self.saveButton = ttk.Button(self.toplevelbottomrow, text="Save File", padding=5, command=None, state=DISABLED)
+        self.saveButton = ttk.Button(self.toplevelbottomrow, text="Save File", padding=5, command=self.onSaveClick, state=DISABLED)
         self.exitButton = ttk.Button(self.toplevelbottomrow, text="Exit", padding=5, command=self.custom_exit_handler, bootstyle=SUCCESS)
         
         # UI Elements placement
@@ -103,7 +106,7 @@ class MainWindow(ttk.Window):
 
         # Dummy Pane into notebook, notebook into middle frame
         self.dummyText.grid(column=0, row=0, sticky=N, pady=5)
-        self.baseTabs.add(self.dummyPanel, text="No data") # Note to self: .forget() to remove a tab from the notebook, then Frame.destroy() to delete it from memory
+        self.baseTabs.add(self.dummyPanel, text="No data") # Note to self: .forget() to remove a tab from the notebook
         self.baseTabs.grid(row=1, column=0, sticky="NSEW", padx=5, pady=5)
 
         # Bottom elements into frame
@@ -178,6 +181,9 @@ class MainWindow(ttk.Window):
             Messagebox.show_error(message="Invalid file format!", title="Error")
             return
         
+        # store savefile path for saving
+        self.savefile = filepath
+        
         # delete old data of bases, if any
         if len(self.frames_for_bases) > 0:
             for frame in self.frames_for_bases:
@@ -202,8 +208,7 @@ class MainWindow(ttk.Window):
             self.create_base_pane(base)    
 
         self.dataChanged = False
-        self.saveButton.config(state=DISABLED)    
-            
+        self.saveButton.config(state=DISABLED)            
         
     # extracted for readability: creating the frame with the information on soldiers in a single base
     def create_base_pane(self, current_base : base) -> None:
@@ -252,9 +257,10 @@ class MainWindow(ttk.Window):
         self.baseTabs.add(new_pane, text=current_base.name)
 
     def on_credits_changed(self, *args) -> None:
+        if self.data != None:
+            self.data.set_credits(int(self.creditsVar.get()))
         self.dataChanged = True
         self.saveButton.config(state=NORMAL)
-
 
     def testCredits(self, what : str) -> bool:
         try:
@@ -262,3 +268,17 @@ class MainWindow(ttk.Window):
         except ValueError:
             return False
         return True
+    
+    def onSaveClick(self) -> None:
+        if self.data == None:
+            return
+        # create backup
+        sh_copy(self.savefile, self.savefile+".bak")
+        
+        # write new save data
+        write_savefile(self.savefile, self.data, self.savefile)
+
+        # all data saved, so revert to the no data changed state
+        self.dataChanged = False
+        self.saveButton.config(state=DISABLED)
+
