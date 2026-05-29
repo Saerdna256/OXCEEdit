@@ -157,10 +157,10 @@ class MainWindow(ttk.Window):
 
         # edit the data in the soldier object (unit) and the new row data to reflect the data returned from the dialog
         for (key, value) in editor.base_stats.items():
-            unit.stats[key][OX_BASE] = int(value.get())
+            unit.set_base_stat(key, int(value.get()))            
         for (key, value) in editor.current_stats.items():
-            unit.stats[key][OX_CURRENT] = int(value.get())
-            row.append(int(value.get()))
+            unit.set_current_stat(key, int(value.get()))            
+            row.append(unit.stats[key][OX_CURRENT])            
         
         # Update visual soldier table
         tab_index = self.baseTabs.index("current")
