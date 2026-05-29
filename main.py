@@ -1,7 +1,8 @@
-import sys
+from UIMain import MainWindow
 
-def main() -> int:
-    sys.exit(0) # exited gracefully
+def main() -> None:
+    app = MainWindow()
+    app.mainloop()
 
 if __name__ == "__main__":
     main()

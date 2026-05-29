@@ -12,6 +12,7 @@ from OXCCEHandlers.bases import base
 from OXCCEHandlers.soldier import soldier
 from OXCCEHandlers.constants import *
 from OXCCEHandlers.reader import read_file
+from OXCCEHandlers.writer import write_savefile
 
 from UISoldier import SoldierWindow
 
@@ -227,6 +228,7 @@ class MainWindow(ttk.Window):
                 soldier.stats[PSI_SKILL][OX_CURRENT],
                 soldier.stats[PSI_STRENGTH][OX_CURRENT],
             )
+
             row_data.append(row)
 
         data_table = Tableview(
@@ -253,19 +255,10 @@ class MainWindow(ttk.Window):
         self.dataChanged = True
         self.saveButton.config(state=NORMAL)
 
+
     def testCredits(self, what : str) -> bool:
         try:
             int(what)
         except ValueError:
             return False
         return True
-
-#####################################################################
-## DEBUG to quickly test this window alone:
-
-def main() -> None:
-    root = MainWindow()
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()
